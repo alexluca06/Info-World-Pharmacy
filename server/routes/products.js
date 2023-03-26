@@ -13,12 +13,12 @@ const authenticateToken = (req, res, next) => {
    if (token == null)  return res.status(401).json({ message: 'Access denied! You must have a token!' })
    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, async (err, userInfo) => {
        if (err) return res.status(403).json({ message: 'The current token is not valid!' })
-       let sqlQuery = `SELECT
-                     role
+       const sqlQuery = `SELECT
+                     userID, username, role 
                      FROM users
                      WHERE username = ?`
-       const role = await db.getOne(sqlQuery, userInfo.username );
-       res.role = role
+       const user = await db.getOne(sqlQuery, userInfo.username);
+       res.user = user
        next()
    })
 }
@@ -45,11 +45,11 @@ router.get('/:productId', authenticateToken,async (req, res) => {
    } catch (error) {
       return res.status(500).json({ message: error.message })
    }
-  });
+  })
 
 // Add a product:
 router.post('/add', authenticateToken, async (req, res) => {
-   if (!res.role == 'ADMIN') return res.status(403).json({ message: "Access denied! No rights!" })
+   if (res.role != 'ADMIN') return res.status(403).json({ message: "Access denied! No rights!" })
    // Extract product info from request body:
    const productInfo = {
       name: req.body.name,
@@ -62,7 +62,7 @@ router.post('/add', authenticateToken, async (req, res) => {
       supply: req.body.supply
    }
 
-   // Save the new product into our database
+   // Save the new product into our database:
   
    let sqlQuery = ` INSERT INTO products 
                (name, price, quantity, pillShape,
@@ -72,11 +72,11 @@ router.post('/add', authenticateToken, async (req, res) => {
    newProduct ? 
       res.status(201).json({ message: "Successfully adding a new product!" }): 
       res.status(500).json({ message: "Cannot adding the new product!" })
-});
+})
 
 // Update the information(eg. name, description, supply...) about a product:
 router.patch('/:productId', authenticateToken, async (req, res) => {
-   if (!res.role == 'ADMIN') return res.status(403).json({ message: "Access denied! No rights!" })
+   if (res.role != 'ADMIN') return res.status(403).json({ message: "Access denied! No rights!" })
    try {
       let sqlQuery = `UPDATE products
                   SET ?
@@ -86,21 +86,16 @@ router.patch('/:productId', authenticateToken, async (req, res) => {
    } catch (error) {
        res.status(500).json({ message: error.message });
    }
-});
+})
 
-// Delete a product already added
-router.delete('/:productId', authenticateToken , async (req, res) => {
-   if (!res.role == 'ADMIN') return res.status(403).json({ message: "Access denied! No rights!" })
-   let sqlQuery = `DELETE FROM products WHERE productID = ?`
-   const result = await db.delete(sqlQuery ,req.params.productId)
-   console.log(result)
+// Delete one or multiple products:
+router.delete('/:remove', authenticateToken , async (req, res) => {
+   if (res.role != 'ADMIN') return res.status(403).json({ message: "Access denied! No rights!" })
+   let sqlQuery = `DELETE FROM orders WHERE productID IN (?)`
+   const result = await db.delete(sqlQuery ,req.body.productsID)
    result ?
       res.status(200).json({ message: 'Deleted product' }):
       res.status(500).json({ message: 'Delete operation failed!'})
-   
-});
-
-
-
+})
 
 module.exports = router;

@@ -10,6 +10,7 @@ class Database {
         }).promise()  // gets the connection to the db
     }
 
+    // Gets a SELECT statement
     async getAll(sqlQuery) { 
         try {
             const [result] = await this.sqlConnection.query(sqlQuery)
@@ -18,7 +19,7 @@ class Database {
              console.log(error)
         }
     }
-
+    // Gets a SELECT ... WHERE (id) statement
     async getOne(sqlQuery, id) { 
         try {
             const [result] = await this.sqlConnection.query(sqlQuery, [id])
@@ -27,7 +28,7 @@ class Database {
             console.log(error)
         }
     }
-
+    // Gets an INSERT ... VALUES (info) statement
     async create(sqlQuery, info) {
         try {
             const [result] = await this.sqlConnection.query(sqlQuery,[Object.values(info)])
@@ -37,14 +38,15 @@ class Database {
         }
     }
 
-
+    // Gets an UPDATE ... SET (newInfo) ... WHERE (id) statement
     async update(sqlQuery, newInfo, id) {
         const result = await this.sqlConnection.query(sqlQuery, [newInfo, id])
         return result
     }
 
-    async delete(sqlQuery, id) {
-        const result = await this.sqlConnection.query(sqlQuery, [id])
+    // Gets a DELETE ... WHERE IN (ids) statement
+    async delete(sqlQuery, ids) {
+        const result = await this.sqlConnection.query(sqlQuery, [ids])
         return result
     }
 }

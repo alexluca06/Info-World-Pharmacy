@@ -10,7 +10,7 @@ CREATE TABLE users (
     firstName VARCHAR(255) NOT NULL,
     lastName VARCHAR(255) NOT NULL,
     cnp VARCHAR(13) NOT NULL UNIQUE,
-    phone VARCHAR(10) NOT NULL,
+    phone VARCHAR(15) NOT NULL,
     email VARCHAR(255),
     address TEXT NOT NULL,
     secondAddress TEXT
@@ -55,24 +55,26 @@ CREATE TABLE tokens (
         ON UPDATE CASCADE
 );
 
-INSERT INTO orders (customerID, productID, cantity, totalPrice, orderDate) 
+INSERT INTO orders (customerID, productID, quantity, totalPrice, orderDate, orderState) 
 VALUES
 (
 6,
-1,
+32,
 2,
 48,
-'2023-03-24'
+'2023-03-24',
+0
 );
 
-INSERT INTO orders (customerID, productID, cantity, totalPrice, orderDate) 
+INSERT INTO orders (customerID, productID, quantity, totalPrice, orderDate, orderState) 
 VALUES
 (
-1,
-1,
+8,
+31,
 3,
 58.69,
-'2023-03-24'
+'2023-03-24',
+0
 );
 
 INSERT INTO users (username, password, firstName, lastName, cnp, phone, email, address) 

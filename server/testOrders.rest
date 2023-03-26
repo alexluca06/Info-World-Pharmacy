@@ -3,3 +3,28 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFsZ
 
 ###
 POST http://localhost:3001/orders/new-order
+###
+DELETE http://localhost:3001/orders/remove
+Content-Type: application/json
+
+{ 
+    "ordersID": [6,7]
+}
+
+### 
+
+POST http://localhost:3001/orders/confirmed
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFsZXgiLCJpYXQiOjE2Nzk4MzA2MTEsImV4cCI6MTY3OTgzMDY3MX0.gSqj-wXUewmOgbe5jtAv5OZGfTzPG280uRxPjGqv77g
+Content-Type: application/json
+
+{
+    "orderID": 2,
+    "customerID": 8,
+    "productID": 32,
+    "quantity": 3
+    
+}
+
+###
+GET http://localhost:3001/orders/
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFsZXgiLCJpYXQiOjE2Nzk4MzQ5ODIsImV4cCI6MTY3OTgzNTA0Mn0.NgjfdFruMCHiUE35VoQU6mvfKmBaYbdpm0MwrW4TfME
