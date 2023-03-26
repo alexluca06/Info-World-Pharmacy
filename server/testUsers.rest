@@ -1,0 +1,56 @@
+###
+POST http://localhost:4000/login
+Content-Type: application/json
+
+{
+    "username": "alex",
+    "password": "luca"
+}
+
+###
+POST http://localhost:3001/users/signup
+Content-Type: application/json
+
+{
+    "username": "alexluca",
+    "password": "12345",
+    "firstName": "Alex",
+    "lastName": "Luca",
+    "cnp": "1990406046288",
+    "phone": "0743568097",
+    "email": "alex@luca.com",
+    "address": "Bucuresti, Romania"
+}
+
+###
+POST http://localhost:4000/token
+Content-Type: application/json
+
+{
+    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFsZXhsdWNhIiwiaWF0IjoxNjc5NzYzMTQ4fQ.W8BdlGQ3RGcmlXUkbmxauDe2NFSInumlDxRAGOpoiRw"
+}
+###
+DELETE http://localhost:4000/logout
+Content-Type: application/json
+
+
+
+
+###
+GET http://localhost:3001/users/
+###
+GET http://localhost:3001/users/alexluca
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFsZXhsdWNhIiwiaWF0IjoxNjc5NzYzMjc0LCJleHAiOjE2Nzk3NjMzMzR9.Dgkxv81u_z5xg4p7puczICsbcxezJ5MReNs91g-9rhU
+###
+PATCH  http://localhost:3001/users/alexluca
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFsZXhsdWNhIiwiaWF0IjoxNjc5NzY0NDk1LCJleHAiOjE2Nzk3NjQ1NTV9.2B7TiZAo2eBjLVAUK0tS4afgeUf2suhHvcYpkk10RpM
+
+{
+    "firstName": "Anaa",
+    "lastName": "Maria",
+    "username": "anamariaaa"
+}
+###
+DELETE http://localhost:3001/users/anamariaaa
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFuYW1hcmlhYWEiLCJpYXQiOjE2Nzk3NjY0NTksImV4cCI6MTY3OTc2NjUxOX0.3ohZKb5WcSVGSndSvHRE8AHtQv94XqakdEUTnxzf8_g
