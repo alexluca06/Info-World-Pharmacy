@@ -1,0 +1,110 @@
+
+// Login and obtain the access token valid for an hour and the refreshToken:
+###
+POST http://localhost:4000/login
+Content-Type: application/json
+
+{
+    "username": "alexluca",
+    "password": "luca"
+}
+
+// Add products: you must to be authenticate and have an ADMIN role
+// update users set role="ADMIN" where username = "alexluca";
+###
+POST http://localhost:3001/products/add
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFsZXhsdWNhIiwiaWF0IjoxNjc5ODU0NDY0LCJleHAiOjE2Nzk4NTgwNjR9.pwxrJQ3MfxOuT29Nn_j-k6krKctFchXNwoq7Zw78b8E
+
+{
+    "name": "Nurofen",
+    "price": 24,
+    "quantity": 12,
+    "pillShape": "comprimate",
+    "description": "Impotriva durerilor de cap si de dinti. Contine ibuprofen",
+    "prescription": 0,
+    "expirationDate": "2025-12-31",
+    "supply": 112
+}
+
+
+###
+POST http://localhost:3001/products/add
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFsZXhsdWNhIiwiaWF0IjoxNjc5ODU0NDY0LCJleHAiOjE2Nzk4NTgwNjR9.pwxrJQ3MfxOuT29Nn_j-k6krKctFchXNwoq7Zw78b8E
+
+{
+    "name": "Parasinus",
+    "price": 32,
+    "quantity": 24,
+    "pillShape": "comprimate",
+    "description": "Impotriva racelii si gripei",
+    "prescription": 0,
+    "expirationDate": "2024-10-21",
+    "supply": 54
+}
+
+###
+POST http://localhost:3001/products/add
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFsZXhsdWNhIiwiaWF0IjoxNjc5ODU0NDY0LCJleHAiOjE2Nzk4NTgwNjR9.pwxrJQ3MfxOuT29Nn_j-k6krKctFchXNwoq7Zw78b8E
+
+{
+    "name": "Medrol",
+    "price": 112,
+    "quantity": 30,
+    "pillShape": "comprimate",
+    "description": "Cortizoli utilizati in ameliorarea simptomelor de inflamatie",
+    "prescription": 1,
+    "expirationDate": "2026-10-21",
+    "supply": 10
+}
+
+
+// Gets all products:
+###
+GET http://localhost:3001/products/
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFsZXhsdWNhIiwiaWF0IjoxNjc5ODU0NDY0LCJleHAiOjE2Nzk4NTgwNjR9.pwxrJQ3MfxOuT29Nn_j-k6krKctFchXNwoq7Zw78b8E
+
+// Get a specific product based on its ID
+###
+GET http://localhost:3001/products/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFsZXhsdWNhIiwiaWF0IjoxNjc5ODU0NDY0LCJleHAiOjE2Nzk4NTgwNjR9.pwxrJQ3MfxOuT29Nn_j-k6krKctFchXNwoq7Zw78b8E
+
+// Should return an error because product doesn't exist
+###
+GET http://localhost:3001/products/1123
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFsZXhsdWNhIiwiaWF0IjoxNjc5ODU0NDY0LCJleHAiOjE2Nzk4NTgwNjR9.pwxrJQ3MfxOuT29Nn_j-k6krKctFchXNwoq7Zw78b8E
+
+// Should lets you update a product only if you have an admin role:
+###
+PATCH  http://localhost:3001/products/3
+Content-Type: application/json
+Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFsZXhsdWNhIiwiaWF0IjoxNjc5ODU0NDY0LCJleHAiOjE2Nzk4NTgwNjR9.pwxrJQ3MfxOuT29Nn_j-k6krKctFchXNwoq7Zw78b8E
+
+{
+    "name": "Parasinus Forte",
+    "supply": 154
+}
+###
+GET http://localhost:3001/products/3
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFsZXhsdWNhIiwiaWF0IjoxNjc5ODU0NDY0LCJleHAiOjE2Nzk4NTgwNjR9.pwxrJQ3MfxOuT29Nn_j-k6krKctFchXNwoq7Zw78b8E
+
+// Should lets you delete products only if you have an admin role:
+###
+DELETE http://localhost:3001/products/3
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFsZXhsdWNhIiwiaWF0IjoxNjc5ODU0NDY0LCJleHAiOjE2Nzk4NTgwNjR9.pwxrJQ3MfxOuT29Nn_j-k6krKctFchXNwoq7Zw78b8E
+
+{
+    "productsID": [3]
+}
+
+###
+DELETE http://localhost:3001/products/3
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFsZXhsdWNhIiwiaWF0IjoxNjc5ODU0NDY0LCJleHAiOjE2Nzk4NTgwNjR9.pwxrJQ3MfxOuT29Nn_j-k6krKctFchXNwoq7Zw78b8E
+
+{
+    "productsID": [4, 1]
+}

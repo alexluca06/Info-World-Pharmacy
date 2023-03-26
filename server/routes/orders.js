@@ -1,28 +1,11 @@
 const express = require('express')
 const router = express.Router()
-const jwt = require('jsonwebtoken');
 const { DateTime } = require("luxon");
 const Database = require('../databases/DatabaseOperations')
+const { authenticateToken } = require('../auth/utils/authenticateToken')
 
 // Connect and access the database:
 const db = new Database()
-
-// Middleware that authenticate a token got from an user
-const authenticateToken = (req, res, next) => {
-   const authHeader = req.headers['authorization'];
-   const token = authHeader && authHeader.split(' ')[1];
-   if (token == null)  return res.status(401).json({ message: 'Access denied! You must have a token!' })
-   jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, async (err, userInfo) => {
-       if (err) return res.status(403).json({ message: 'The current token is not valid!' })
-       const sqlQuery = `SELECT
-                     userID, username, role 
-                     FROM users
-                     WHERE username = ?`
-       const user = await db.getOne(sqlQuery, userInfo.username);
-       res.user = user
-       next()
-   })
-}
 
 // Get all orders:
 router.get('/', authenticateToken, async (req, res) => {
@@ -58,7 +41,7 @@ router.get('/:username', authenticateToken,async (req, res) => {
 router.post('/new-order', authenticateToken, async (req, res) => {
    let userID = -1
    if (res.user.role === 'ADMIN') {
-      userID = req.body.userID  // as the ADMIN to can place an order for a user
+      userID = req.body.customerID  // as the ADMIN to can place an order for a user
    } else {
       userID = res.user.userID  // prevent user to use another user id for a order
    }
@@ -83,20 +66,27 @@ router.post('/new-order', authenticateToken, async (req, res) => {
 })
 
 // Update the information(eg. quantity or products) about an order:
-router.patch('/:username', authenticateToken, async (req, res) => {
+router.patch('/update', authenticateToken, async (req, res) => {
+   let userID = -1
+   if (res.user.role === 'ADMIN') {
+      userID = req.body.customerID  // as the ADMIN to can place an order for a user
+   } else {
+      userID = res.user.userID  // prevent user to use another user id for a order
+   }
+
    try {
       const sqlQuery = `UPDATE orders
                   SET ?
                   WHERE customerID = ?`
-      await db.update(sqlQuery, req.body, res.user.userID);
-      res.status(200).json({message: "Product updates success!"});
+      await db.update(sqlQuery, req.body, userID);
+      return res.status(200).json({message: "Product updates success!"});
    } catch (error) {
        res.status(500).json({ message: error.message });
    }
 })
 
 router.post('/confirmed', authenticateToken, async (req, res) => {
-   if (res.role !== 'ADMIN') return res.status(403).json({ message: "Access denied! No rights!" })
+   if (res.user.role !== 'ADMIN') return res.status(403).json({ message: "Access denied! No rights!" })
    // Get suplly value for a product by its productID:
    const sqlQuery = `SELECT products.supply
                FROM products
@@ -112,13 +102,13 @@ router.post('/confirmed', authenticateToken, async (req, res) => {
       try {
           // Update the supply value of the product:
          const newSupplyValue = response.supply - req.body.quantity
-         let sqlQuery = `UPDATE products
+         const sqlQuery = `UPDATE products
                         SET ?
                         WHERE productID = ?`
          await db.update(sqlQuery, { supply: newSupplyValue }, req.body.productID)
          
          // Update the order status:
-         let sqlQuery1 = `UPDATE orders
+         const sqlQuery1 = `UPDATE orders
                         SET ?
                         WHERE orderID = ?`
          await db.update(sqlQuery1, { orderState: true }, req.body.orderID)
@@ -132,11 +122,13 @@ router.post('/confirmed', authenticateToken, async (req, res) => {
 
 // Delete one or multiple orders:
 router.delete('/:remove', async (req, res) => {
-   const sqlQuery = `DELETE FROM orders WHERE orderID IN (?)`
-   const result = await db.delete(sqlQuery, req.body.ordersID)
-   result ?
-      res.status(200).json({ message: 'Deleted order!' }):
-      res.status(500).json({ message: 'Delete operation failed!'})
+   try {
+      const sqlQuery = `DELETE FROM orders WHERE orderID IN (?)`
+      const result = await db.delete(sqlQuery, req.body.ordersID)
+      return res.status(200).json(result)
+   } catch(error) {
+      res.status(500).json({ message: error.message})
+   }
    
 })
 

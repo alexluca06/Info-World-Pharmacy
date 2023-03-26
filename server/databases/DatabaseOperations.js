@@ -1,11 +1,12 @@
 const mysql = require('mysql2')
+require('dotenv').config({ path: '../.env' })
 
 class Database {
     constructor() {
         this.sqlConnection = mysql.createPool({
-            host: '127.0.0.1',
-            user: 'alexluca06',
-            password: 'password',
+            host: process.env.DB_HOST,
+            user: process.env.DB_USER,
+            password: process.env.DB_PASSWORD,
             database: 'info_world_pharmacy'
         }).promise()  // gets the connection to the db
     }

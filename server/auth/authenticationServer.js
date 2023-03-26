@@ -36,7 +36,7 @@ const getUser = async (req, res, next) => {
 }
 
 // Function that generates an access token based on user info: username etc
-const generateAccessToken = (userInfo, expiresIn='60s') => {
+const generateAccessToken = (userInfo, expiresIn='3600s') => {
    return jwt.sign(userInfo, process.env.ACCESS_TOKEN_SECRET, { expiresIn: expiresIn })
 }
 

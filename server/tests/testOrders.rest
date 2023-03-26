@@ -1,0 +1,114 @@
+// Login and obtain the access token valid for an hour and the refreshToken:
+###
+POST http://localhost:4000/login
+Content-Type: application/json
+
+{
+    "username": "alexluca",
+    "password": "luca"
+}
+
+// Order made it by ADMIN for an user:
+// needed only when admin make the order for an user
+###
+POST http://localhost:3001/orders/new-order
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFsZXhsdWNhIiwiaWF0IjoxNjc5ODU2MDY1LCJleHAiOjE2Nzk4NTk2NjV9.tVDVbnr2F9wk-ak9aiDsqjEGA1C5SCF7t6SWLj-bFa0
+
+{
+    "customerID": 11, 
+    "productID": 5,
+    "quantity": 10,
+    "totalPrice":  150
+}
+
+###
+POST http://localhost:3001/orders/new-order
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFsZXhsdWNhIiwiaWF0IjoxNjc5ODU2MDY1LCJleHAiOjE2Nzk4NTk2NjV9.tVDVbnr2F9wk-ak9aiDsqjEGA1C5SCF7t6SWLj-bFa0
+
+{
+    "customerID": 12, 
+    "productID": 6,
+    "quantity": 12,
+    "totalPrice":  120
+}
+
+###
+POST http://localhost:3001/orders/new-order
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFsZXhsdWNhIiwiaWF0IjoxNjc5ODU2MDY1LCJleHAiOjE2Nzk4NTk2NjV9.tVDVbnr2F9wk-ak9aiDsqjEGA1C5SCF7t6SWLj-bFa0
+
+{
+    "customerID": 12, 
+    "productID": 5,
+    "quantity": 2,
+    "totalPrice":  120
+}
+
+// Order made it by an user:
+###
+POST http://localhost:3001/orders/new-order
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFsZXhsdWNhIiwiaWF0IjoxNjc5ODU2MDY1LCJleHAiOjE2Nzk4NTk2NjV9.tVDVbnr2F9wk-ak9aiDsqjEGA1C5SCF7t6SWLj-bFa0
+
+{
+    "productID": 5,
+    "quantity": 2,
+    "totalPrice":  120
+}
+
+// Update an order(by admin):
+###
+PATCH  http://localhost:3001/orders/update
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFsZXhsdWNhIiwiaWF0IjoxNjc5ODU2MDY1LCJleHAiOjE2Nzk4NTk2NjV9.tVDVbnr2F9wk-ak9aiDsqjEGA1C5SCF7t6SWLj-bFa0
+
+{
+    "customerID": 12,
+    "quantity": 3
+}
+
+### 
+
+// Get all orders(from all users): must be an admin
+###
+GET http://localhost:3001/orders/
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFsZXhsdWNhIiwiaWF0IjoxNjc5ODU2MDY1LCJleHAiOjE2Nzk4NTk2NjV9.tVDVbnr2F9wk-ak9aiDsqjEGA1C5SCF7t6SWLj-bFa0
+
+// Delete on or more orders:
+###
+DELETE http://localhost:3001/orders/remove
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFsZXhsdWNhIiwiaWF0IjoxNjc5ODU2MDY1LCJleHAiOjE2Nzk4NTk2NjV9.tVDVbnr2F9wk-ak9aiDsqjEGA1C5SCF7t6SWLj-bFa0
+
+{ 
+    "ordersID": [4]
+}
+
+###
+DELETE http://localhost:3001/orders/remove
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFsZXhsdWNhIiwiaWF0IjoxNjc5ODU2MDY1LCJleHAiOjE2Nzk4NTk2NjV9.tVDVbnr2F9wk-ak9aiDsqjEGA1C5SCF7t6SWLj-bFa0
+
+{ 
+    "ordersID": [1, 2, 3]
+}
+
+### 
+
+POST http://localhost:3001/orders/confirmed
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFsZXhsdWNhIiwiaWF0IjoxNjc5ODU2MDY1LCJleHAiOjE2Nzk4NTk2NjV9.tVDVbnr2F9wk-ak9aiDsqjEGA1C5SCF7t6SWLj-bFa0
+
+{
+    "orderID": 2,
+    "customerID": 12,
+    "productID": 6,
+    "quantity": 12
+    
+}
+
+###
+GET http://localhost:3001/orders/
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFsZXhsdWNhIiwiaWF0IjoxNjc5ODU2MDY1LCJleHAiOjE2Nzk4NTk2NjV9.tVDVbnr2F9wk-ak9aiDsqjEGA1C5SCF7t6SWLj-bFa0

@@ -1,0 +1,141 @@
+//The first 3 requests should create with success 3 users
+###
+POST http://localhost:3001/users/signup  
+Content-Type: application/json
+
+{
+    "username": "alexluca",
+    "password": "luca",
+    "firstName": "Alex",
+    "lastName": "Luca",
+    "cnp": "1990406046288",
+    "phone": "+40 743 568 097",
+    "email": "alex@luca.com",
+    "address": "Sector 6, Bucuresti, Romania"
+}
+
+###
+POST http://localhost:3001/users/signup  
+Content-Type: application/json
+
+{
+    "username": "anamaria",
+    "password": "1234",
+    "firstName": "Ana",
+    "lastName": "Maria",
+    "cnp": "2590424244688",
+    "phone": "+40 744 528 017",
+    "email": "ana@maria.com",
+    "address": "Strada Apele Vii, Bucuresti, Romania",
+    "secondAddress": "Brasov, Romania"
+}
+
+
+###
+POST http://localhost:3001/users/signup  
+Content-Type: application/json
+
+{
+    "username": "ionpopescu",
+    "password": "password",
+    "firstName": "Ion",
+    "lastName": "Popescu",
+    "cnp": "1990412336253",
+    "phone": "+40 751 568 197",
+    "address": "Sector 6, Bucuresti, Romania"
+}
+
+// This should failed because username already used:
+
+###
+POST http://localhost:3001/users/signup  
+Content-Type: application/json
+
+{
+    "username": "ionpopescu",
+    "password": "1234",
+    "firstName": "Anghel",
+    "lastName": "Popovici",
+    "cnp": "1990412336213",
+    "phone": "+40 721 568 197",
+    "address": "Sector 4, Bucuresti, Romania"
+}
+
+// This should failed because wrong data:
+
+###
+POST http://localhost:3001/users/signup  
+Content-Type: application/json
+
+{
+    "username": "anghelpopovici",
+    "password": "12345678",
+    "firstName": "Anghel",
+    "lastName": "Popovici",
+    "email": "anghel.popovici.com",
+    "cnp": "19904123362122",
+    "phone": "0721 568 1972",
+    "address": "Sector 4, Bucuresti, Romania"
+}
+
+// Login and obtain the access token valid for an hour and the refreshToken:
+###
+POST http://localhost:4000/login
+Content-Type: application/json
+
+{
+    "username": "alexluca",
+    "password": "luca"
+}
+
+// Get a new access token after the previous expired based on the refreshToken:
+
+###
+POST http://localhost:4000/token
+Content-Type: application/json
+
+{
+    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFsZXhsdWNhIiwiaWF0IjoxNjc5ODUyNzExfQ.lMmpFcwlqY6psGxsU1rmWJtQiaSKGVjhJGYQC0uzTng"
+}
+
+// Logout by deleting the refresh token from the database(you cannot create anothers access tokens):
+###
+DELETE http://localhost:4000/logout
+Content-Type: application/json
+
+{
+    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFsZXhsdWNhIiwiaWF0IjoxNjc5ODUyNzExfQ.lMmpFcwlqY6psGxsU1rmWJtQiaSKGVjhJGYQC0uzTng"
+}
+
+// Gets all users: you need to have an admin role:
+###
+GET http://localhost:3001/users/
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFsZXhsdWNhIiwiaWF0IjoxNjc5ODYxMTA5LCJleHAiOjE2Nzk4NjQ3MDl9.-jCz0srMtMBgfIhBxV2R8QEix680H8i-3X4Q1dNmvoY
+
+// Get user profile for the current logged user
+###
+GET http://localhost:3001/users/alexluca
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFsZXhsdWNhIiwiaWF0IjoxNjc5ODUzMTYwLCJleHAiOjE2Nzk4NTY3NjB9.czEOJ7L7BsCv52a-L8M7s1IdE2zldxL22e7ex3wUxhc
+
+// Modify profile about current logged user
+###
+PATCH  http://localhost:3001/users/alexluca
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFsZXhsdWNhIiwiaWF0IjoxNjc5ODUzMTYwLCJleHAiOjE2Nzk4NTY3NjB9.czEOJ7L7BsCv52a-L8M7s1IdE2zldxL22e7ex3wUxhc
+
+{
+    "firstName": "Alexandru",
+    "lastName": "Lucas",
+    "email": "asdsa@yahoo.com"
+
+}
+// Delete one or more users based on their ids:
+###
+DELETE http://localhost:3001/users/alexluca
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFsZXhsdWNhIiwiaWF0IjoxNjc5ODUzOTY2LCJleHAiOjE2Nzk4NTc1NjZ9.-3AB6yIXup_E-Gs0qkFHU-_DMUCGuW73dvbE-TjclMU
+
+
+{
+    "usersID": [5, 6]
+}
